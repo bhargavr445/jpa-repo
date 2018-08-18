@@ -1,40 +1,82 @@
 package com.techprimers.jpa.springjpahibernateexample.resource;
 
+import com.techprimers.jpa.springjpahibernateexample.exception.UsersListEmpty;
+import com.techprimers.jpa.springjpahibernateexample.model.Categories;
+import com.techprimers.jpa.springjpahibernateexample.model.TokenParams;
+import com.techprimers.jpa.springjpahibernateexample.model.UserRegister;
 import com.techprimers.jpa.springjpahibernateexample.model.Users;
+import com.techprimers.jpa.springjpahibernateexample.repository.CategoriesRepository;
 import com.techprimers.jpa.springjpahibernateexample.repository.UsersRepository;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
-@RequestMapping("/rest/users")
+@RequestMapping(value="/rest/users")
 public class UsersResource {
 
+	static Logger logger = Logger.getLogger(UsersResource.class);
     @Autowired
     UsersRepository usersRepository;
-
-    @GetMapping("/all")
+   
+    @Autowired
+	 BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    @Autowired
+    CategoriesRepository categoriesRepository;
+    
+    @GetMapping(value = "/logIn")
+   	public UserRegister logIn(HttpServletRequest req) {
+    	UserRegister ur = new UserRegister();
+   		//ur.setPassword();
+   		ur.setUserName(req.getHeader("userName"));
+   	  ur.setPassword(bCryptPasswordEncoder.encode(req.getHeader("password")));
+//   		System.out.println(header);
+//   		TokenParams tokenParams = new TokenParams();
+//   		tokenParams.setAccessToken("AccessToken");
+//   		tokenParams.setExpiresIn("20:00 min");
+//   		tokenParams.setTokenType("test");
+//   		tokenParams.setRole(req.getHeader("role"));
+//   		tokenParams.setUserName(req.getHeader("token"));
+   		return ur;
+   	}
+    
+    @GetMapping(value ="/all")
     public List<Users> getAll() {
-        return usersRepository.findAll();
+         List<Users> findAll = usersRepository.findAll();
+         if(findAll == null) {
+        	 throw new UsersListEmpty("User empty");
+         }
+         return findAll;
     }
 
-    @GetMapping("/{name}")
-    public List<Users> getUser(@PathVariable("name") final String name) {
+    @GetMapping(value ="/{name}")
+    public List<Users> getUser(@PathVariable(value = "name") final String name) {
         return usersRepository.findByName(name);
 
     }
 
-    @GetMapping("/id/{id}")
-    public Users getId(@PathVariable("id") final Integer id) {
+    @GetMapping(value ="/id/{id}")
+    public Users getId(@PathVariable(value="id") final Integer id) {
+
         return usersRepository.findOne(id);
     }
 
-    @GetMapping("/update/{id}/{name}")
-    public Users update(@PathVariable("id") final Integer id, @PathVariable("name")
+    @GetMapping(value ="/update/{id}/{name}")
+    public Users update(@PathVariable(value="id") final Integer id, @PathVariable(value="name")
                          final String name) {
 
 
@@ -43,4 +85,24 @@ public class UsersResource {
 
         return usersRepository.save(users);
     }
+    @GetMapping(value ="/getAllCategories")
+    public List<Categories> getAllCat() {
+    	List<Categories> cat =	categoriesRepository.findAll();
+        return cat;
+    }
+    
+    @DeleteMapping(value ="/deleteServer/{id}")
+    public String deleteServer(@PathVariable(value="id") final String serverid) {
+    	logger.info("Server "+ serverid +" Deleted" );
+    	return "sucess";
+    	
+    }
+
+
+    
+//    @PostMapping("/addCategories")
+//    public int addData(@RequestBody Categories categories) {
+//    	System.out.println(categories);
+//    	return 1;
+//    }
 }

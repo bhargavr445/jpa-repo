@@ -33,12 +33,10 @@ public class StudentRepositoryImpl implements StudentRepositoryI {
 		return 0;
 	}
 	@Override
-	//@Transactional
+	@Transactional
 	public Student getStudentById(int id) {
-		// TODO Auto-generated method stub
-		Student stu = em.find(Student.class, id);
-		//Student stu = null;
-		//Passport p = em.find(Passport.class, 201);
+		// TODO Auto-generated method stu
+			Student stu = em.find(Student.class, id);
 		return stu;
 	}
 	

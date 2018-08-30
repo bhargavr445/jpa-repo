@@ -1,9 +1,6 @@
 package com.techprimers.jpa.springjpahibernateexample.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="Student")
@@ -12,9 +9,9 @@ public class Student {
 	private int student_id;
 	private String student_name;
 	
-//	@OneToOne
-//	private Passport passport;
-//	
+	@OneToOne
+	private Passport passport;
+
 	public int getStudent_id() {
 		return student_id;
 	}
@@ -29,17 +26,17 @@ public class Student {
 	}
 	
 	
-//	public Passport getPassport() {
-//		return passport;
-//	}
-//	public void setPassport(Passport passport) {
-//		this.passport = passport;
-//	}
-//	@Override
-//	public String toString() {
-//		return "Student [student_id=" + student_id + ", student_name=" + student_name + ", passport=" + passport + "]";
-//	}
-	
+	public Passport getPassport() {
+		return passport;
+	}
+	public void setPassport(Passport passport) {
+		this.passport = passport;
+	}
+	@Override
+	public String toString() {
+		return "Student [student_id=" + student_id + ", student_name=" + student_name + ", passport=" + passport + "]";
+	}
+
 	
 	
 }

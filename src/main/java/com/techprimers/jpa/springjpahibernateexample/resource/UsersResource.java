@@ -1,13 +1,12 @@
 package com.techprimers.jpa.springjpahibernateexample.resource;
 
 import com.techprimers.jpa.springjpahibernateexample.exception.UsersListEmpty;
-import com.techprimers.jpa.springjpahibernateexample.model.Categories;
-import com.techprimers.jpa.springjpahibernateexample.model.TokenParams;
-import com.techprimers.jpa.springjpahibernateexample.model.UserRegister;
-import com.techprimers.jpa.springjpahibernateexample.model.Users;
+import com.techprimers.jpa.springjpahibernateexample.model.*;
 import com.techprimers.jpa.springjpahibernateexample.repository.CategoriesRepository;
 import com.techprimers.jpa.springjpahibernateexample.repository.UsersRepository;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,6 +54,12 @@ public class UsersResource {
    	}
     
     @GetMapping(value ="/all")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success", response = Users.class),
+            @ApiResponse(code = 202, message = "Accepted"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "Failure", response= ExceptionResponse.class)
+    })
     public List<Users> getAll() {
          List<Users> findAll = usersRepository.findAll();
          if(findAll == null) {

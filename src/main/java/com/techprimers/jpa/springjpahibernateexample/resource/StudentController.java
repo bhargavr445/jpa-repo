@@ -1,5 +1,8 @@
 package com.techprimers.jpa.springjpahibernateexample.resource;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +23,16 @@ public class StudentController {
 	
 	@Autowired
 	public StudentI studentI;
-	
+
+
 	@GetMapping(value="getStudentById/{id}")
+	@ApiOperation(value = "Student Controller", nickname = "Student Controller")
+	//swagger documentation
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Success"),
+			@ApiResponse(code = 400, message = "Bad Request"),
+			@ApiResponse(code = 500, message = "Failure")
+	})
 	public Student getStudent(@PathVariable(value="id") final int id, 
 							 @RequestParam(value="param1", required=true) String param1) {
 		String s = param1;
@@ -34,6 +45,11 @@ public class StudentController {
 	}
 	
 	@PostMapping(value="/cerateStudent")
+//	@ApiResponses(value = {
+//			@ApiResponse(code = 200, message = "Success", response = StudentController.class),
+//			@ApiResponse(code = 400, message = "Bad Request", response = StudentController.class),
+//			@ApiResponse(code = 500, message = "Failure", response = StudentController.class)
+//	})
 	public int cerateStudent(@RequestBody Student student) {
 		studentI.createStudent(student);
 		return 1;

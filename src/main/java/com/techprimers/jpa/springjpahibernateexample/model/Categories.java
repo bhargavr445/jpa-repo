@@ -1,5 +1,8 @@
 package com.techprimers.jpa.springjpahibernateexample.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -10,8 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @Entity
 @Table(name="categories", catalog = "ownproject")
+@ApiModel(description = "Categories Description")
 public class Categories {
 	@Id
+	@ApiModelProperty(notes = "cai_id must be integer")
 	private int cat_id;
 	private String cat_name;
 	private String cat_description;

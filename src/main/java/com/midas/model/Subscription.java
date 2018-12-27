@@ -3,13 +3,20 @@ package com.midas.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="subscription")
 public class Subscription {
 	@Id
+	@NotNull
 	private String name;
+	@NotNull
+	@Size(min=2, max=2)
 	private String state;
+	@NotNull
+	@Size(min=2, max=4)
 	private String period;
 	private String userName;
 	private String modification;

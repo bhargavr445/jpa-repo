@@ -23,7 +23,6 @@ public class Categories {
 //	private List<Products> products;
 	
 	Categories(){
-		
 	}
 	
 	
